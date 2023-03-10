@@ -8,5 +8,5 @@ to run this project:
 
 # Resources
 
-- [This french tutorial](https://www.youtube.com/watch?v=8rPXqmBG99c&t=238s)
+- [This _french_ tutorial](https://www.youtube.com/watch?v=8rPXqmBG99c&t=238s)
 - [Saloon package docs](https://docs.saloon.dev/)
