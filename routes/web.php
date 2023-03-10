@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Integrations\FakeIntegration\FakeConnector;
+use App\Http\Integrations\FakeIntegration\Requests\GetCommentRequest;
+use App\Http\Integrations\FakeIntegration\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +18,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', fn () => view('welcome'));
+
+Route::get('/saloon', function () {
+    $connector = new FakeConnector();
+
+    $request = new StorePostRequest();
+    $request
+        ->body()
+        ->merge([
+            'title' => 'some title',
+            'content' => 'some content',
+            'userId' => 15,
+        ]);
+    // $response = $connector->send(new GetCommentRequest(postId: 1));
+    $response = $connector->send($request);
+
+    dd($response->body(), $response->json());
 });
