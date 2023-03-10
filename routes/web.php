@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'));
 
-Route::get('/saloon', function () {
+Route::get('/saloon-post', function () {
     $connector = new FakeConnector();
 
     $request = new StorePostRequest();
@@ -31,7 +31,15 @@ Route::get('/saloon', function () {
             'content' => 'some content',
             'userId' => 15,
         ]);
-    // $response = $connector->send(new GetCommentRequest(postId: 1));
+    $response = $connector->send($request);
+
+    dd($response->body(), $response->json());
+});
+
+Route::get('/saloon-get', function () {
+    $connector = new FakeConnector();
+
+    $request = new GetCommentRequest(postId: 1);
     $response = $connector->send($request);
 
     dd($response->body(), $response->json());
