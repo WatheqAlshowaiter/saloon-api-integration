@@ -2,18 +2,30 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use App\Http\Integrations\FakeIntegration\FakeConnector;
+use App\Http\Integrations\FakeIntegration\Requests\GetCommentRequest;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Laravel\Facades\Saloon;
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
+it('registers response', function () {
+    Saloon::fake([
+        MockResponse::fixture('comments.index'),
+    ]);
 
-        $response->assertStatus(200);
-    }
-}
+    $connector = new FakeConnector();
+    $connector->send(new GetCommentRequest(postId: 1));
+});
+
+it('returns valid json', function () {
+    Saloon::fake([
+        MockResponse::make(['title' => 'Sam'], 200),
+    ]);
+
+    $connector = new FakeConnector();
+    $response = $connector->send(new GetCommentRequest(postId: 1));
+
+    expect($response->body())
+        ->json()
+        ->toHaveCount(1)
+        ->title->toBe('Sam');
+})->only();
